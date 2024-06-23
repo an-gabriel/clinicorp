@@ -3,13 +3,21 @@ const config = require("../config/index");
 
 class MongoDBConnector {
   constructor() {
-    this.MONGODB_URI = config.dbUri;
+    if (!MongoDBConnector.instance) {
+      this.MONGODB_URI = config.dbUri;
+      this._initialized = false;
+      MongoDBConnector.instance = this;
+    }
+    return MongoDBConnector.instance;
   }
 
   async connect() {
     try {
-      await mongoose.connect(this.MONGODB_URI);
-      console.log("Conexão bem-sucedida com o servidor MongoDB");
+      if (!this._initialized) {
+        await mongoose.connect(this.MONGODB_URI);
+        console.log("Conexão bem-sucedida com o servidor MongoDB");
+        this._initialized = true;
+      }
     } catch (error) {
       console.error("Erro ao conectar ao MongoDB:", error);
       process.exit(1);
