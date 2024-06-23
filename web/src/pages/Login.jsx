@@ -12,9 +12,10 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await loginUser({ username, password });
+
+      const response = await loginUser({ email: username, password });
       localStorage.setItem('token', response.token);
-      navigate('/projects');
+      navigate('/home');
     } catch (error) {
       console.error('Erro ao fazer login:', error);
     }
