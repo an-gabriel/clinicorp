@@ -1,5 +1,3 @@
-// src/controllers/projeto.controller.js
-
 const ProjetoCommands = require("../commands/index");
 const projetoCommands = new ProjetoCommands();
 
@@ -22,8 +20,39 @@ class ProjetoController {
    *     responses:
    *       200:
    *         description: Projetos retornados com sucesso.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 type: object
+   *                 properties:
+   *                   id:
+   *                     type: string
+   *                     description: ID do projeto.
+   *                   userId:
+   *                     type: string
+   *                     description: ID do usuário.
+   *                   name:
+   *                     type: string
+   *                     description: Nome do projeto.
+   *                   description:
+   *                     type: string
+   *                     description: Descrição do projeto.
+   *                   createdAt:
+   *                     type: string
+   *                     format: date-time
+   *                     description: Data de criação do projeto.
    *       500:
    *         description: Erro ao buscar projetos.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 error:
+   *                   type: string
+   *                   description: Mensagem de erro.
    */
   async getAll(req, res) {
     try {
@@ -48,20 +77,57 @@ class ProjetoController {
    *         name: id
    *         required: true
    *         schema:
-   *           type: integer
+   *           type: string
    *         description: ID do projeto a ser retornado.
    *     responses:
    *       200:
    *         description: Projeto retornado com sucesso.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 id:
+   *                   type: string
+   *                   description: ID do projeto.
+   *                 userId:
+   *                   type: string
+   *                   description: ID do usuário.
+   *                 name:
+   *                   type: string
+   *                   description: Nome do projeto.
+   *                 description:
+   *                   type: string
+   *                   description: Descrição do projeto.
+   *                 createdAt:
+   *                   type: string
+   *                   format: date-time
+   *                   description: Data de criação do projeto.
    *       404:
    *         description: Projeto não encontrado.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 error:
+   *                   type: string
+   *                   description: Mensagem de erro.
    *       500:
    *         description: Erro ao buscar projeto.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 error:
+   *                   type: string
+   *                   description: Mensagem de erro.
    */
   async getById(req, res) {
     try {
       const userId = req.user.userId;
-      const projetoId = parseInt(req.params.id);
+      const projetoId = req.params.id;
       const projeto = await projetoCommands.getById(projetoId, userId);
       if (!projeto) {
         return res.status(404).json({ error: "Projeto não encontrado" });
@@ -97,8 +163,37 @@ class ProjetoController {
    *     responses:
    *       201:
    *         description: Projeto criado com sucesso.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 id:
+   *                   type: string
+   *                   description: ID do projeto.
+   *                 userId:
+   *                   type: string
+   *                   description: ID do usuário.
+   *                 name:
+   *                   type: string
+   *                   description: Nome do projeto.
+   *                 description:
+   *                   type: string
+   *                   description: Descrição do projeto.
+   *                 createdAt:
+   *                   type: string
+   *                   format: date-time
+   *                   description: Data de criação do projeto.
    *       500:
    *         description: Erro ao criar projeto.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 error:
+   *                   type: string
+   *                   description: Mensagem de erro.
    */
   async create(req, res) {
     try {
@@ -129,7 +224,7 @@ class ProjetoController {
    *         name: id
    *         required: true
    *         schema:
-   *           type: integer
+   *           type: string
    *         description: ID do projeto a ser atualizado.
    *     requestBody:
    *       required: true
@@ -147,13 +242,42 @@ class ProjetoController {
    *     responses:
    *       200:
    *         description: Projeto atualizado com sucesso.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 id:
+   *                   type: string
+   *                   description: ID do projeto.
+   *                 userId:
+   *                   type: string
+   *                   description: ID do usuário.
+   *                 name:
+   *                   type: string
+   *                   description: Nome do projeto.
+   *                 description:
+   *                   type: string
+   *                   description: Descrição do projeto.
+   *                 createdAt:
+   *                   type: string
+   *                   format: date-time
+   *                   description: Data de criação do projeto.
    *       500:
    *         description: Erro ao atualizar projeto.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 error:
+   *                   type: string
+   *                   description: Mensagem de erro.
    */
   async update(req, res) {
     try {
       const userId = req.user.userId;
-      const projetoId = parseInt(req.params.id);
+      const projetoId = req.params.id;
       const { name, description } = req.body;
       const projetoAtualizado = await projetoCommands.update(
         projetoId,
@@ -181,18 +305,34 @@ class ProjetoController {
    *         name: id
    *         required: true
    *         schema:
-   *           type: integer
+   *           type: string
    *         description: ID do projeto a ser excluído.
    *     responses:
    *       200:
    *         description: Projeto excluído com sucesso.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 message:
+   *                   type: string
+   *                   description: Mensagem de sucesso.
    *       500:
    *         description: Erro ao excluir projeto.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 error:
+   *                   type: string
+   *                   description: Mensagem de erro.
    */
   async delete(req, res) {
     try {
       const userId = req.user.userId;
-      const projetoId = parseInt(req.params.id);
+      const projetoId = req.params.id;
       await projetoCommands.delete(projetoId, userId);
       res.json({ message: "Projeto excluído com sucesso" });
     } catch (err) {
