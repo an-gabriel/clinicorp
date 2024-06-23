@@ -41,7 +41,7 @@ const taskService = new TaskService();
 class TaskController {
   /**
    * @swagger
-   * /projects/{projectId}/tasks:
+   * /api/projects/{projectId}/tasks:
    *   get:
    *     summary: Retorna todas as tarefas de um projeto.
    *     tags:
@@ -78,7 +78,7 @@ class TaskController {
 
   /**
    * @swagger
-   * /projects/{projectId}/tasks:
+   * /api/projects/{projectId}/tasks:
    *   post:
    *     summary: Criar uma nova tarefa em um projeto.
    *     tags:

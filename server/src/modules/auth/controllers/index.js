@@ -10,7 +10,7 @@ class AuthController {
 
   /**
    * @swagger
-   * /auth/register:
+   * /api/auth/register:
    *   post:
    *     summary: Registrar um novo usuário
    *     tags: [Auth]
@@ -45,7 +45,7 @@ class AuthController {
 
   /**
    * @swagger
-   * /auth/login:
+   * /api/auth/login:
    *   post:
    *     summary: Autenticar um usuário existente
    *     tags: [Auth]
