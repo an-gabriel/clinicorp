@@ -1,37 +1,41 @@
-const { MongoClient } = require("mongodb");
+const mongoose = require("mongoose");
 const config = require("../config/index");
 
-const uri = config.dbUri;
-const client = new MongoClient(uri);
+class MongoDBConnector {
+  constructor() {
+    this.MONGODB_URI = config.dbUri;
+  }
 
-async function connectToMongoDB() {
-  try {
-    await client.connect();
-    console.log("Connected successfully to MongoDB server");
-  } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
-    process.exit(1); // Exit process with failure
+  async connect() {
+    try {
+      await mongoose.connect(this.MONGODB_URI);
+      console.log("Conexão bem-sucedida com o servidor MongoDB");
+    } catch (error) {
+      console.error("Erro ao conectar ao MongoDB:", error);
+      process.exit(1);
+    }
+  }
+
+  addEventListeners() {
+    mongoose.connection.on("error", (err) => {
+      console.error("Erro na conexão com o MongoDB:", err);
+    });
+
+    mongoose.connection.on("disconnected", () => {
+      console.log("Desconectado do MongoDB");
+    });
+
+    mongoose.connection.on("reconnected", () => {
+      console.log("Reconectado ao MongoDB");
+    });
+
+    mongoose.connection.on("close", () => {
+      console.log("Conexão com o MongoDB fechada");
+    });
   }
 }
 
-// Event listeners for MongoDB client
-client.on("error", (err) => {
-  console.error("MongoDB connection error:", err);
-});
+const dbConnector = new MongoDBConnector();
+dbConnector.addEventListeners();
 
-client.on("disconnected", () => {
-  console.log("MongoDB disconnected");
-});
-
-client.on("reconnected", () => {
-  console.log("MongoDB reconnected");
-});
-
-client.on("close", () => {
-  console.log("MongoDB connection closed");
-});
-
-module.exports = {
-  connectToMongoDB,
-  client,
-};
+module.exports = dbConnector;

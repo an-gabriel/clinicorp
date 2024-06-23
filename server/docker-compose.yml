@@ -2,14 +2,15 @@ version: "3.8"
 services:
   mongo:
     image: mongo:latest
-    container_name: mongo
+    restart: always
+    container_name: mongo_docker_db
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_ROOT_USERNAME: ROOTUSERNAME
+      MONGO_INITDB_ROOT_PASSWORD: ROOTPASSWORD
 
   backend:
     build: ./
@@ -20,7 +21,7 @@ services:
       - ./server:/usr/src/app
     environment:
       - PORT=5000
-      - DB_URI=mongodb://localhost:27017/project_test
+      - DB_URI=mongodb://mongodb:mongodb@mongo_docker_db:27017/project_test
       - JWT_SECRET=4e21504a-ff39-4a26-809d-745b2b8fcfac
     depends_on:
       - mongo
