@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+
+  backend:
+    build: ./
+    container_name: backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./server:/usr/src/app
+    environment:
+      - PORT=5000
+      - DB_URI=mongodb://localhost:27017/project_test
+      - JWT_SECRET=4e21504a-ff39-4a26-809d-745b2b8fcfac
+    depends_on:
+      - mongo
+
+volumes:
+  mongo-data:
