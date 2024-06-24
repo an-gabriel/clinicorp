@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Drawer, List, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography, Container, useMediaQuery, useTheme } from '@mui/material';
-import { AccountCircle, ExitToApp } from '@mui/icons-material';
+import { AccountCircle, ExitToApp, ListAlt } from '@mui/icons-material';
 
 const drawerWidth = 240;
 
@@ -40,7 +40,12 @@ const Dashboard = () => {
               </ListItemIcon>
               <ListItemText primary="Registrar" />
             </ListItemButton>
-            {/* Adicione mais itens de menu conforme necessário */}
+            <ListItemButton component={Link} to="/projects">
+              <ListItemIcon>
+                <ListAlt />
+              </ListItemIcon>
+              <ListItemText primary="Projetos" />
+            </ListItemButton>
           </List>
         </div>
       </Drawer>
