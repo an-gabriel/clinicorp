@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const prisma = require("../../../config/prisma");
+const config = require("../../../config/index");
 
 class AuthCommands {
   async register(name, email, password) {
@@ -33,7 +34,7 @@ class AuthCommands {
         throw new Error("Unable to access");
       }
 
-      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
+      const token = jwt.sign({ userId: user.id }, config.jwtSecret);
       return { token, user };
     } catch (error) {
       throw new Error(`Failed to log in: ${error.message}`);
