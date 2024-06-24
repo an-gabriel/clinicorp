@@ -6,7 +6,7 @@ class ProjetoService {
   }
 
   async getById(projetoId, userId) {
-    return await prisma.projeto.findUnique({
+    return await prisma.project.findUnique({
       where: {
         id: projetoId,
         userId: userId,
@@ -15,7 +15,7 @@ class ProjetoService {
   }
 
   async create(userId, name, description) {
-    return await prisma.projeto.create({
+    return await prisma.project.create({
       data: {
         userId: userId,
         name: name,
@@ -26,7 +26,7 @@ class ProjetoService {
   }
 
   async update(projetoId, userId, name, description) {
-    return await prisma.projeto.update({
+    return await prisma.project.update({
       where: {
         id: projetoId,
         userId: userId,
@@ -39,7 +39,7 @@ class ProjetoService {
   }
 
   async delete(projetoId, userId) {
-    return await prisma.projeto.delete({
+    return await prisma.project.delete({
       where: {
         id: projetoId,
         userId: userId,
