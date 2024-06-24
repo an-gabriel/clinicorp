@@ -1,5 +1,3 @@
-// src/commands/projeto.commands.js
-
 const ProjetoService = require("../services/index");
 
 const projetoService = new ProjetoService();

@@ -11,9 +11,11 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ROOTUSERNAME
       MONGO_INITDB_ROOT_PASSWORD: ROOTPASSWORD
+    networks:
+      - clinicorp-network
 
   backend:
-    build: ./
+    build: ./server
     container_name: backend
     ports:
       - "5000:5000"
@@ -25,6 +27,20 @@ services:
       - JWT_SECRET=4e21504a-ff39-4a26-809d-745b2b8fcfac
     depends_on:
       - mongo
+    networks:
+      - clinicorp-network
+
+  web:
+    build: ./web
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - clinicorp-network
+networks:
+  clinicorp-network:
+    driver: bridge
 
 volumes:
   mongo-data:

@@ -1,53 +1,44 @@
-const TaskCommands = require("../commands/index");
-
-const taskCommands = new TaskCommands();
+const prisma = require("../../../config/prisma");
 
 class TaskService {
-  async getAllTasks(projectId) {
-    try {
-      const tasks = await taskCommands.getAll(projectId);
-      return tasks;
-    } catch (error) {
-      throw new Error("Erro ao buscar tarefas");
-    }
+  async getAll(projectId) {
+    return await prisma.task.findMany({
+      where: { projectId },
+    });
   }
 
-  async createTask(projectId, title, description, status) {
-    try {
-      const newTask = await taskCommands.create(
+  async create(projectId, title, description, status, userId) {
+    const task = await prisma.task.create({
+      data: {
         projectId,
-        title,
+        completedBy: userId,
         description,
-        status
-      );
-      return newTask;
-    } catch (error) {
-      throw new Error("Erro ao criar tarefa");
-    }
+        status: status,
+        createdAt: new Date(),
+        title,
+      },
+    });
+    console.log(task);
+    return task;
   }
 
-  async updateTask(id, title, description, status, completedBy, completedAt) {
-    try {
-      const updatedTask = await taskCommands.update(
-        id,
+  async update(taskId, title, description, status, completedBy, completedAt) {
+    return await prisma.task.update({
+      where: { id : taskId },
+      data: {
         title,
         description,
         status,
         completedBy,
-        completedAt
-      );
-      return updatedTask;
-    } catch (error) {
-      throw new Error("Erro ao atualizar tarefa");
-    }
+        completedAt,
+      },
+    });
   }
 
-  async deleteTask(id) {
-    try {
-      await taskCommands.delete(id);
-    } catch (error) {
-      throw new Error("Erro ao excluir tarefa");
-    }
+  async delete(id) {
+    return await prisma.task.delete({
+      where: { id },
+    });
   }
 }
 

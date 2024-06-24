@@ -1,20 +1,23 @@
-# Use the official Node.js 14 image.
+# server/Dockerfile
 FROM node:18
 
-# Create and change to the app directory.
-WORKDIR /usr/src/app
+# Define o diretório de trabalho dentro do contêiner
+WORKDIR /usr/src/app/server
 
-# Copy application dependency manifests to the container image.
+# Copia o package.json e package-lock.json
 COPY package*.json ./
 
-# Install dependencies.
+# Instala as dependências
 RUN npm install
 
-# Copy local code to the container image.
+# Copia o código da aplicação
 COPY . .
 
-# Expose the port the app runs on
+# Expõe a porta que a aplicação vai rodar
 EXPOSE 5000
 
-# Run the web service on container startup.
-CMD ["npm", "run", "dev"]
+# generate prisma models
+RUN npm run generate:models
+
+# Comando para iniciar a aplicação
+CMD ["npm", "start"]

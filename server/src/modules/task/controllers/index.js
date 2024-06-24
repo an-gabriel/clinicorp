@@ -1,6 +1,5 @@
-const TaskService = require("../services/index");
-
-const taskService = new TaskService();
+const TaskCommands = require("../commands/index");
+const taskCommands = new TaskCommands();
 
 /**
  * @swagger
@@ -68,7 +67,7 @@ class TaskController {
   async getAll(req, res) {
     try {
       const projectId = req.params.projectId;
-      const tasks = await taskService.getAllTasks(projectId);
+      const tasks = await taskCommands.getAllTasks(projectId);
       res.json(tasks);
     } catch (error) {
       console.error(error);
@@ -119,12 +118,15 @@ class TaskController {
   async create(req, res) {
     try {
       const projectId = req.params.projectId;
+      const userId = req.user.userId;
       const { title, description, status } = req.body;
-      const newTask = await taskService.createTask(
+
+      const newTask = await taskCommands.createTask(
         projectId,
         title,
         description,
-        status
+        status,
+        userId
       );
       res.status(201).json(newTask);
     } catch (error) {
@@ -183,8 +185,13 @@ class TaskController {
   async update(req, res) {
     try {
       const taskId = req.params.id;
-      const { title, description, status, completedBy, completedAt } = req.body;
-      const updatedTask = await taskService.updateTask(
+      const userId = req.user.userId;
+      const { title, description, status } = req.body;
+
+      const completedBy = userId;
+      const completedAt = new Date().toISOString();
+
+      const updatedTask = await taskCommands.updateTask(
         taskId,
         title,
         description,
@@ -194,7 +201,6 @@ class TaskController {
       );
       res.json(updatedTask);
     } catch (error) {
-      console.error(error);
       res.status(500).json({ error: "Erro ao atualizar tarefa" });
     }
   }
@@ -222,7 +228,7 @@ class TaskController {
   async delete(req, res) {
     try {
       const taskId = req.params.id;
-      await taskService.deleteTask(taskId);
+      await taskCommands.deleteTask(taskId);
       res.json({ message: "Tarefa excluída com sucesso" });
     } catch (error) {
       console.error(error);

@@ -68,4 +68,40 @@ export const deleteProject = async (projectId) => {
   }
 };
 
+export const listTasks = async (projectId) => {
+  try {
+    const response = await api.get(`/projects/${projectId}/tasks`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createTask = async (projectId, taskData) => {
+  try {
+    const response = await api.post(`/projects/${projectId}/tasks`, taskData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateTask = async (taskId, taskData) => {
+  try {
+    const response = await api.put(`/tasks/${taskId}`, taskData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteTask = async (taskId) => {
+  try {
+    const response = await api.delete(`/tasks/${taskId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default api;
