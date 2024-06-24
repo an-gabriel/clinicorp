@@ -1,42 +1,57 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Drawer, List, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography, Container, useMediaQuery, useTheme } from '@mui/material';
-import { AccountCircle, ExitToApp, ListAlt } from '@mui/icons-material';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import {
+  Drawer,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Toolbar,
+  Typography,
+  Container,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import { PersonAdd, ListAlt } from "@mui/icons-material";
+import Logout from "../components/Logout";
+import RegistrationForm from "./SignUp";
 
 const drawerWidth = 240;
 
 const Dashboard = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [openRegistrar, setOpenRegistrar] = useState(false);
+
+  const toggleDrawer = (open) => (event) => {
+    setOpenRegistrar(open);
+  };
 
   return (
-    <div style={{ display: 'flex' }}>
+    <div style={{ display: "flex" }}>
       <Drawer
         variant={isMobile ? "temporary" : "permanent"}
+        anchor="left"
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          '& .MuiDrawer-paper': {
+          "& .MuiDrawer-paper": {
             width: drawerWidth,
-            boxSizing: 'border-box',
+            boxSizing: "border-box",
           },
         }}
-      >
+        open={!isMobile || openRegistrar}
+        onClose={toggleDrawer(false)}>
         <Toolbar />
         <div>
           <Typography variant="h6" align="center" noWrap>
             Menu
           </Typography>
           <List>
-            <ListItemButton component={Link} to="/login">
+            <Logout />
+            <ListItemButton onClick={() => setOpenRegistrar(true)}>
               <ListItemIcon>
-                <AccountCircle />
-              </ListItemIcon>
-              <ListItemText primary="Login" />
-            </ListItemButton>
-            <ListItemButton component={Link} to="/signup">
-              <ListItemIcon>
-                <ExitToApp />
+                <PersonAdd />
               </ListItemIcon>
               <ListItemText primary="Registrar" />
             </ListItemButton>
@@ -49,13 +64,18 @@ const Dashboard = () => {
           </List>
         </div>
       </Drawer>
-      <Container sx={{ flexGrow: 1, mt: 8, ml: isMobile ? 0 : drawerWidth }}>
-        <Typography variant="h4" gutterBottom>
-          Bem-vindo ao Dashboard
-        </Typography>
-        <Typography variant="body1">
-          Aqui você pode gerenciar seus projetos e tarefas.
-        </Typography>
+      <Container sx={{ flexGrow: 1, mt: 8 }}>
+        {!openRegistrar && (
+          <>
+            <Typography variant="h4" align="center" gutterBottom>
+              Bem-vindo ao Dashboard
+            </Typography>
+            <Typography variant="body1" align="center">
+              Aqui você pode gerenciar seus projetos e tarefas.
+            </Typography>
+          </>
+        )}
+        {openRegistrar && <RegistrationForm />}
       </Container>
     </div>
   );

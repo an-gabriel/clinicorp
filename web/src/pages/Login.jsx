@@ -1,29 +1,43 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { Container, Paper, Typography, TextField, Button, Grid } from '@mui/material';
-import { loginUser } from '../client/api';
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import {
+  Container,
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  Grid,
+  CircularProgress,
+} from "@mui/material";
+import { loginUser } from "../client/api";
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
+    setLoading(true); 
 
+    try {
       const response = await loginUser({ email: username, password });
-      localStorage.setItem('token', response.token);
-      navigate('/home');
+      localStorage.setItem("token", response.token);
+      navigate("/home");
     } catch (error) {
-      console.error('Erro ao fazer login:', error);
+      console.error("Erro ao fazer login:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Container maxWidth="sm" sx={{ height: '100vh', display: 'flex', alignItems: 'center' }}>
-      <Paper elevation={3} sx={{ padding: 3, width: '100%' }}>
+    <Container
+      maxWidth="sm"
+      sx={{ height: "100vh", display: "flex", alignItems: "center" }}>
+      <Paper elevation={3} sx={{ padding: 3, width: "100%" }}>
         <Typography variant="h4" gutterBottom align="center">
           Login
         </Typography>
@@ -49,9 +63,13 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12} sx={{ textAlign: 'center' }}>
+            <Grid item xs={12} sx={{ textAlign: "center" }}>
               <Button type="submit" variant="contained" color="primary">
-                Login
+                {loading ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : (
+                  "Login"
+                )}
               </Button>
             </Grid>
           </Grid>
@@ -59,8 +77,8 @@ const Login = () => {
         <Grid container justifyContent="flex-end" sx={{ mt: 2 }}>
           <Grid item>
             <Typography variant="body2">
-              Ainda não tem uma conta?{' '}
-              <Link to="/signup" style={{ textDecoration: 'none' }}>
+              Ainda não tem uma conta?{" "}
+              <Link to="/signup" style={{ textDecoration: "none" }}>
                 Registre-se aqui
               </Link>
             </Typography>
