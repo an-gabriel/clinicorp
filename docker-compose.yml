@@ -23,7 +23,7 @@ services:
       - ./:/usr/src/app
     environment:
       - PORT=5000
-      - DB_URI=mongodb://ROOTUSERNAME:ROOTPASSWORD@mongo_docker_db:27017/clinicorp
+      - DB_URI=mongodb+srv://ROOTUSERNAME:ROOTPASSWORD@clinicorp.aihmwmg.mongodb.net/?retryWrites=true&w=majority&appName=clinicorp
       - JWT_SECRET=4e21504a-ff39-4a26-809d-745b2b8fcfac
     depends_on:
       - mongo
